@@ -9,20 +9,19 @@ const Composite = Matter.Composite;
 
 let engine;
 let world;
-var rope, fruit, ground;
-var fruit_con;
-var fruit_con_2;
+var fruit, ground;
+var fruit_con1, fruit_con2, fruit_con3;
 
 var bg_img;
 var food;
 var rabbit;
 
-var button, blower;
+var button1, button2, button3, blower;
 var bunny;
 var blink, eat, sad;
 var mute_btn, mute_img;
 
-var fr, rope2;
+var fr, rope1, rope2, rope3;
 
 var bk_song;
 var cut_sound;
@@ -58,8 +57,10 @@ function setup() {
   var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   if (isMobile) {
     createCanvas(displayWidth, displayHeight);
+    bunny = createSprite(170, 620, 100, displayHeight-80);
   } else {
     createCanvas(windowWidth, windowHeight);
+    bunny = createSprite(170, 620, 100, windowHeight-80);
   }
 
   frameRate(80);
@@ -69,19 +70,29 @@ function setup() {
   engine = Engine.create();
   world = engine.world;
 
-  button = createImg('cut_btn.png');
-  button.position(220, 30);
-  button.size(50, 50);
-  button.mouseClicked(drop);
+  button1 = createImg('cut_btn.png');
+  button1.position(20, 30);
+  button1.size(50, 50);
+  button1.mouseClicked(drop1);
 
+  button2 = createImg('cut_btn.png');
+  button2.position(330, 55);
+  button2.size(50, 50);
+  button2.mouseClicked(drop2);
 
-  rope = new Rope(7, { x: 245, y: 30 });
+  button3 = createImg('cut_btn.png');
+  button3.position(360, 200);
+  button3.size(50, 50);
+  button3.mouseClicked(drop3);
+
+  rope1 = new Rope(8, { x: 40, y: 30 });
+  rope2 = new Rope(7, { x: 355, y: 40 });
+  rope3 = new Rope(5, { x: 385, y: 200 });
   ground = new Ground(200, 690, 600, 20);
 
   blink.frameDelay = 20;
   eat.frameDelay = 20;
 
-  bunny = createSprite(350, 620, 100, 100);
   bunny.scale = 0.2;
 
   bunny.addAnimation('blinking', blink);
@@ -89,10 +100,14 @@ function setup() {
   bunny.addAnimation('crying', sad);
   bunny.changeAnimation('blinking');
 
-  fruit = Bodies.circle(300, 300, 20);
-  Matter.Composite.add(rope.body, fruit);
+  fruit = Bodies.circle(300, 300, 20)//, {density:0.001});
+  Matter.Composite.add(rope1.body, fruit);
+  // Matter.Composite.add(rope2.body, fruit);
+  // Matter.Composite.add(rope3.body, fruit);
 
-  fruit_con = new Link(rope, fruit);
+  fruit_con1 = new Link(rope1, fruit);
+  fruit_con2 = new Link(rope2, fruit);
+  fruit_con3 = new Link(rope3, fruit);
 
   rectMode(CENTER);
   ellipseMode(RADIUS);
@@ -138,7 +153,9 @@ function draw() {
   }
   pop();
 
-  rope.show();
+  rope1.show();
+  rope2.show();
+  rope3.show();
   Engine.update(engine);
   ground.show();
 
@@ -173,10 +190,22 @@ function toggleMute() {
   }
 }
 
-function drop() {
-  rope.break();
-  fruit_con.detach();
-  fruit_con = null;
+function drop1() {
+  rope1.break();
+  fruit_con1.detach();
+  fruit_con1 = null;
+}
+
+function drop2() {
+  rope2.break();
+  fruit_con2.detach();
+  fruit_con2 = null;
+}
+
+function drop3() {
+  rope3.break();
+  fruit_con3.detach();
+  fruit_con3 = null;
 }
 
 function blow() {
